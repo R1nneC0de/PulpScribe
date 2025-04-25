@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "842455681019",
+    "project_id": "bookaiapp",
+    "storage_bucket": "bookaiapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842455681019:android:069a8995bf3372fee16d5e",
+        "android_client_info": {
+          "package_name": "com.example.bookaiapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDJMXQT-T0ROLX6O960jGwrHpFfF58jyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842455681019:android:254b65f005c9c68de16d5e",
+        "android_client_info": {
+          "package_name": "com.example.pulpscribe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDJMXQT-T0ROLX6O960jGwrHpFfF58jyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
