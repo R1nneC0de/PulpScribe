@@ -38,9 +38,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void saveGenres() async {
     final user = _auth.currentUser;
     if (user != null) {
-      await _firestore.collection('users').doc(user.uid).update({
-        'genres': _genres,
-      });
+      await _firestore.collection('users').doc(user.uid).set(
+        {'email': user.email, 'genres': _genres},
+        SetOptions(merge: true),
+      ); // 🔥 Fix: Merge instead of overwrite entire document
+
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Genres updated!')));
@@ -84,7 +86,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Icon(Icons.person, size: 60, color: Colors.white),
                     ),
                     const SizedBox(height: 16),
-
                     Text(
                       user.email ?? '',
                       style: const TextStyle(
@@ -93,7 +94,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 32),
-
                     const Text(
                       "Favorite Genres",
                       style: TextStyle(
@@ -103,7 +103,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 12),
-
                     Wrap(
                       spacing: 8,
                       children:
@@ -117,7 +116,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           }).toList(),
                     ),
                     const SizedBox(height: 20),
-
                     Row(
                       children: [
                         Expanded(
@@ -138,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           onPressed: addGenre,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.deepPurple,
-                            foregroundColor: Colors.white, // ✅ fixed
+                            foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -148,7 +146,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     const SizedBox(height: 24),
-
                     ElevatedButton.icon(
                       onPressed: saveGenres,
                       icon: const Icon(Icons.save),
@@ -161,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.deepPurple,
-                        foregroundColor: Colors.white, // ✅ fixed
+                        foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

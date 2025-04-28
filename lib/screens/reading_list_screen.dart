@@ -29,23 +29,37 @@ class _ReadingListScreenState extends State<ReadingListScreen> {
             .where('status', isEqualTo: category)
             .get();
 
-    return snapshot.docs.map((doc) => doc.data()).toList();
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      data['docId'] = doc.id; 
+      return data;
+    }).toList();
   }
 
-  Future<void> removeBook(String bookId) async {
+  Future<void> updateBookStatus(String docId, String newStatus) async {
     final user = _auth.currentUser;
     if (user == null) return;
 
-    final ref = _firestore
+    await _firestore
         .collection('users')
         .doc(user.uid)
-        .collection('readingList');
+        .collection('readingList')
+        .doc(docId)
+        .update({'status': newStatus});
 
-    final snapshot = await ref.where('id', isEqualTo: bookId).get();
+    setState(() {}); 
+  }
 
-    for (var doc in snapshot.docs) {
-      await doc.reference.delete();
-    }
+  Future<void> removeBook(String docId) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+
+    await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('readingList')
+        .doc(docId)
+        .delete();
 
     setState(() {}); 
   }
@@ -53,7 +67,7 @@ class _ReadingListScreenState extends State<ReadingListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEDE7F6), 
+      backgroundColor: const Color(0xFFEDE7F6), // Lavender background
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
         title: const Text("Your Reading List"),
@@ -114,13 +128,45 @@ class _ReadingListScreenState extends State<ReadingListScreen> {
                                   )
                                   : const Icon(Icons.book, size: 50),
                           title: Text(book['title'] ?? 'No Title'),
-                          subtitle: Text(book['author'] ?? 'Unknown Author'),
-                          trailing: IconButton(
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.redAccent,
-                            ),
-                            onPressed: () => removeBook(book['id']),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(book['author'] ?? 'Unknown Author'),
+                              const SizedBox(height: 4),
+                              Text(
+                                "Status: ${book['status']}",
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                          trailing: PopupMenuButton<String>(
+                            icon: const Icon(Icons.more_vert),
+                            onSelected: (value) {
+                              if (value == 'Delete') {
+                                removeBook(book['docId']);
+                              } else {
+                                updateBookStatus(book['docId'], value);
+                              }
+                            },
+                            itemBuilder:
+                                (context) => [
+                                  const PopupMenuItem(
+                                    value: 'Want to Read',
+                                    child: Text('Mark as Want to Read'),
+                                  ),
+                                  const PopupMenuItem(
+                                    value: 'Currently Reading',
+                                    child: Text('Mark as Currently Reading'),
+                                  ),
+                                  const PopupMenuItem(
+                                    value: 'Finished',
+                                    child: Text('Mark as Finished'),
+                                  ),
+                                  const PopupMenuItem(
+                                    value: 'Delete',
+                                    child: Text('Delete'),
+                                  ),
+                                ],
                           ),
                         ),
                       );
