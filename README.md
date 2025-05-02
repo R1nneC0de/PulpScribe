@@ -31,13 +31,13 @@ BookAI is a Flutter-based mobile application that helps users discover new books
 
 ## 🗃️ Project Structure
 
-lib/
-├── models/ # Book, Review, User models
-├── services/ # Auth, Firestore, Book API
-├── screens/ # Auth, Home, Profile, Reading List, Discussion
-├── widgets/ # Reusable UI components
-├── firebase_options.dart
-├── main.dart
+- lib/
+- ├── models/ # Book, Review, User models
+- ├── services/ # Auth, Firestore, Book API
+- ├── screens/ # Auth, Home, Profile, Reading List, Discussion
+- ├── widgets/ # Reusable UI components
+- ├── firebase_options.dart
+- ├── main.dart
 
 
 ---
