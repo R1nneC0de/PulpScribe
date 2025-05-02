@@ -6,7 +6,14 @@ class FirestoreService {
 
   /// Submit a review to Firestore
   Future<void> submitReview(Review review) async {
-    await _db.collection('reviews').add(review.toMap());
+    print('Submitting review for bookId: ${review.bookId}');
+    await _db.collection('reviews').add({
+      'userId': review.userId,
+      'bookId': review.bookId,
+      'review': review.review,
+      'rating': review.rating,
+      'timestamp': FieldValue.serverTimestamp(), 
+    });
   }
 
   /// Get all reviews for a specific book
